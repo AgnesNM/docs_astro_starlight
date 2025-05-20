@@ -1,0 +1,131 @@
+---
+title: "Vue Documentation"
+# Other frontmatter properties as needed
+---
+
+### Approachable
+
+Already know HTML, CSS and JavaScript? Read the guide and start building things in no time!
+
+### Versatile
+
+An incrementally adoptable ecosystem that scales between a library and a full-featured framework.
+
+### Performant
+
+Truly reactive, compiler-optimized rendering system that rarely requires manual optimization.
+
+### Progressive Integration
+
+Use Vue for a tiny part of your page or build complex single-page applications. Vue grows with your needs.
+
+## Features at a Glance
+
+### Declarative Rendering
+
+Vue extends standard HTML with a template syntax that allows us to declaratively describe HTML output based on JavaScript state.
+
+```html
+<div id="app">
+  <button @click="count++">
+    Count is: {{ count }}
+  </button>
+</div>
+```
+
+### Reactive Data Binding
+
+Vue automatically tracks JavaScript state changes and efficiently updates the DOM when changes happen. No need for manual DOM manipulations.
+
+### Component-Based Architecture
+
+Build encapsulated components that manage their own state, then compose them to make complex UIs. Component logic, template, and styles can live in a single file.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const count = ref(0)
+</script>
+
+<template>
+  <button @click="count++">Count is: {{ count }}</button>
+</template>
+
+<style scoped>
+button {
+  font-weight: bold;
+}
+</style>
+```
+
+### Rich Ecosystem
+
+Vue has a vast ecosystem of libraries and tools that help you tackle complexity in large applications:
+
+- **Vue Router** - The official router for Vue.js
+- **Pinia** - State management that is intuitive and type-safe
+- **Vite** - Next generation frontend tooling
+- **Nuxt** - An intuitive framework built on top of Vue
+
+## Get Started
+
+New to Vue.js? Here are some resources to get you started:
+
+### For Beginners
+
+- [Introduction to Vue.js](/guide/introduction)
+- [Quick Start Guide](/guide/quick-start)
+- [Interactive Tutorial](/tutorial/)
+
+### For Experienced Developers
+
+- [Migration from Vue 2](/guide/migration)
+- [TypeScript Support](/guide/typescript)
+- [Best Practices](/style-guide/)
+
+### Exploring the Ecosystem
+
+- [Official Tools](/ecosystem/official-tools)
+- [Community Projects](/ecosystem/community)
+- [UI Libraries](/ecosystem/ui-libraries)
+
+## Join Our Community
+
+Vue has a vibrant and friendly community. If you have questions or want to contribute:
+
+- [Discord Chat](https://chat.vuejs.org/)
+- [Forum](https://forum.vuejs.org/)
+- [Twitter](https://twitter.com/vuejs)
+- [GitHub](https://github.com/vuejs)
+
+---
+
+<div class="footer-links">
+  <div class="footer-section">
+    <h3>Documentation</h3>
+    <ul>
+      <li><a href="/guide/introduction">Guide</a></li>
+      <li><a href="/api/">API Reference</a></li>
+      <li><a href="/style-guide/">Style Guide</a></li>
+      <li><a href="/examples/">Examples</a></li>
+    </ul>
+  </div>
+  <div class="footer-section">
+    <h3>Resources</h3>
+    <ul>
+      <li><a href="/ecosystem/partners">Partners</a></li>
+      <li><a href="/ecosystem/themes">Themes</a></li>
+      <li><a href="/certification/">Certification</a></li>
+      <li><a href="https://vuejobs.com/">Jobs</a></li>
+    </ul>
+  </div>
+  <div class="footer-section">
+    <h3>Support Vue</h3>
+    <ul>
+      <li><a href="/sponsor/">One-time Donation</a></li>
+      <li><a href="https://github.com/sponsors/vuejs">GitHub Sponsors</a></li>
+      <li><a href="/enterprise/">Enterprise Support</a></li>
+    </ul>
+  </div>
+</div>
+

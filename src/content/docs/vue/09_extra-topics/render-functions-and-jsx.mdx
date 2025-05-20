@@ -1,0 +1,572 @@
+---
+title: RenderFunctionsAndJsx
+description: Learn about RenderFunctionsAndJsx in Vue.js
+---
+
+## h()
+
+```js
+import { h } from 'vue'
+
+const vnode = h(
+  'div', // type
+  { id: 'foo', class: 'bar' }, // props
+  [
+    /* children */
+  ]
+)
+```
+
+## createVNode()
+
+`h()` is an alias for `createVNode()`.
+
+```js
+// all arguments except the type are optional
+h('div')
+h('div', { id: 'foo' })
+
+// both attributes and properties can be used in props
+// Vue automatically picks the right way to assign it
+h('div', { class: 'bar', innerHTML: 'hello' })
+
+// props modifiers such as `.prop` and `.attr` can be added
+// with `.` and `^` prefixes respectively
+h('div', { '.name': 'some-name', '^width': '100' })
+
+// class and style have the same object / array
+// value support that they have in templates
+h('div', { class: [foo, { bar }], style: { color: 'red' } })
+
+// event listeners should be passed as onXxx
+h('div', { onClick: () => {} })
+
+// children can be a string
+h('div', { id: 'foo' }, 'hello')
+
+// props can be omitted when there are no props
+h('div', 'hello')
+h('div', [h('span', 'hello')])
+
+// children array can contain mixed vnodes and strings
+h('div', ['hello', h('span', 'hello')])
+```
+
+```js
+const vnode = h('div', { id: 'foo' }, [])
+vnode.type // 'div'
+vnode.props // { id: 'foo' }
+vnode.children // []
+vnode.key // null
+```
+
+## setup()
+
+```js
+import { ref, h } from 'vue'
+
+export default {
+  props: {
+    /* ... */
+  },
+  setup(props) {
+    const count = ref(1)
+    // return the render function
+    return () => h('div', props.msg + count.value)
+  }
+}
+```
+
+```js
+export default {
+  setup() {
+    return () => 'hello world!'
+  }
+}
+```
+
+## VNode
+
+⚠ Warning notice about VNode usage
+
+```js
+import { h } from 'vue'
+
+export default {
+  setup() {
+    // use an array to return multiple root nodes
+    return () => [
+      h('div'),
+      h('div'),
+      h('div')
+    ]
+  }
+}
+```
+
+```js
+function Hello() {
+  return 'hello world!'
+}
+
+function render() {
+  const p = h('p', 'hi')
+  return h('div', [
+    // Yikes - duplicate vnodes!
+    p,
+    p
+  ])
+}
+```
+
+```js
+function render() {
+  return h(
+    'div',
+    Array.from({ length: 20 }).map(() => {
+      return h('p', 'hi')
+    })
+  )
+}
+```
+
+## JSX
+
+```jsx
+const vnode = <div>hello</div>
+```
+
+```jsx
+const vnode = <div id={dynamicId}>hello, {userName}</div>
+```
+
+In `tsconfig.json`, set `"jsx": "preserve"`.
+
+JSX configuration information:
+
+```js
+/* @jsxImportSource vue */
+```
+
+For JSX, note that `vue/jsx` handles JSX differently - `class` is used instead of `className` and `for` instead of `htmlFor`.
+
+```json
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "vue"
+    // ...
+  }
+}
+```
+
+## Rendering Logic
+
+### v-if
+
+Template version:
+```html
+<div>
+  <div v-if="ok">yes</div>
+  <span v-else>no</span>
+</div>
+```
+
+Render function version:
+```js
+h('div', [ok.value ? h('div', 'yes') : h('span', 'no')])
+```
+
+JSX version:
+```jsx
+<div>{ok.value ? <div>yes</div> : <span>no</span>}</div>
+```
+
+### v-for
+
+Template version:
+```html
+<ul>
+  <li v-for="{ id, text } in items" :key="id">
+    {{ text }}
+  </li>
+</ul>
+```
+
+Render function version:
+```js
+h(
+  'ul',
+  // assuming `items` is a ref with array value
+  items.value.map(({ id, text }) => {
+    return h('li', { key: id }, text)
+  })
+)
+```
+
+JSX version:
+```jsx
+<ul>
+  {items.value.map(({ id, text }) => {
+    return <li key={id}>{text}</li>
+  })}
+</ul>
+```
+
+## Event Handling
+
+Using `on` prefix for events (equivalent to `@click` in templates) like `onClick`:
+
+```js
+h(
+  'button',
+  {
+    onClick(event) {
+      /* ... */
+    }
+  },
+  'Click Me'
+)
+```
+
+JSX version:
+```jsx
+<button
+  onClick={(event) => {
+    /* ... */
+  }}
+>
+  Click Me
+</button>
+```
+
+Event modifiers (`.passive`, `.capture`, `.once`) equivalent to `v-on`:
+
+```js
+h('input', {
+  onClickCapture() {
+    /* listener in capture mode */
+  },
+  onKeyupOnce() {
+    /* triggers only once */
+  },
+  onMouseoverOnceCapture() {
+    /* once + capture */
+  }
+})
+```
+
+JSX version:
+```jsx
+<input
+  onClickCapture={() => {}}
+  onKeyupOnce={() => {}}
+  onMouseoverOnceCapture={() => {}}
+/>
+```
+
+Using `withModifiers` with `h()`:
+
+```js
+import { withModifiers } from 'vue'
+
+h('div', {
+  onClick: withModifiers(() => {}, ['self'])
+})
+```
+
+JSX version:
+```jsx
+<div onClick={withModifiers(() => {}, ['self'])} />
+```
+
+## Components
+
+```js
+import Foo from './Foo.vue'
+import Bar from './Bar.jsx'
+
+function render() {
+  return h('div', [h(Foo), h(Bar)])
+}
+```
+
+JSX version:
+```jsx
+function render() {
+  return (
+    <div>
+      <Foo />
+      <Bar />
+    </div>
+  )
+}
+```
+
+Conditional component rendering:
+
+```js
+import Foo from './Foo.vue'
+import Bar from './Bar.jsx'
+
+function render() {
+  return ok.value ? h(Foo) : h(Bar)
+}
+```
+
+JSX version:
+```jsx
+function render() {
+  return ok.value ? <Foo /> : <Bar />
+}
+```
+
+## Slots
+
+```js
+export default {
+  props: ['message'],
+  setup(props, { slots }) {
+    return () => [
+      // default slot:
+      // <div><slot /></div>
+      h('div', slots.default()),
+      
+      // named slot:
+      // <div><slot name="footer" :text="message" /></div>
+      h(
+        'div',
+        slots.footer({
+          text: props.message
+        })
+      )
+    ]
+  }
+}
+```
+
+JSX version:
+```jsx
+// default
+<div>{slots.default()}</div>
+
+// named
+<div>{slots.footer({ text: props.message })}</div>
+```
+
+Passing slots to components:
+
+```js
+// single default slot
+h(MyComponent, () => 'hello')
+
+// named slots
+// notice the `null` is required to avoid
+// the slots object being treated as props
+h(MyComponent, null, {
+  default: () => 'default slot',
+  foo: () => h('div', 'foo'),
+  bar: () => [h('span', 'one'), h('span', 'two')]
+})
+```
+
+JSX version:
+```jsx
+// default
+<MyComponent>{() => 'hello'}</MyComponent>
+
+// named
+<MyComponent>{{
+  default: () => 'default slot',
+  foo: () => <div>foo</div>,
+  bar: () => [<span>one</span>, <span>two</span>]
+}}</MyComponent>
+```
+
+Scoped slots example:
+
+```js
+// parent component
+export default {
+  setup() {
+    return () => h(MyComp, null, {
+      default: ({ text }) => h('p', text)
+    })
+  }
+}
+
+// child component
+export default {
+  setup(props, { slots }) {
+    const text = ref('hi')
+    return () => h('div', null, slots.default({ text: text.value }))
+  }
+}
+```
+
+JSX version:
+```jsx
+<MyComponent>{{
+  default: ({ text }) => <p>{ text }</p>
+}}</MyComponent>
+```
+
+## Built-in Components
+
+Working with `<KeepAlive>`, `<Transition>`, `<TransitionGroup>`, `<Teleport>`, and `<Suspense>`:
+
+```js
+import { h, KeepAlive, Teleport, Transition, TransitionGroup } from 'vue'
+
+export default {
+  setup () {
+    return () => h(Transition, { mode: 'out-in' }, /* ... */)
+  }
+}
+```
+
+## v-model
+
+Implementing `v-model` with render functions (using `modelValue` and `onUpdate:modelValue`):
+
+```js
+export default {
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    return () =>
+      h(SomeComponent, {
+        modelValue: props.modelValue,
+        'onUpdate:modelValue': (value) => emit('update:modelValue', value)
+      })
+  }
+}
+```
+
+## Custom Directives
+
+Using `withDirectives` and `resolveDirective`:
+
+```js
+import { h, withDirectives } from 'vue'
+
+// a custom directive
+const pin = {
+  mounted() { /* ... */ },
+  updated() { /* ... */ }
+}
+
+// <div v-pin:top.animate="200"></div>
+const vnode = withDirectives(h('div'), [
+  [pin, 200, 'top', { animate: true }]
+])
+```
+
+## Template Refs
+
+Using `useTemplateRef()`:
+
+```js
+import { h, useTemplateRef } from 'vue'
+
+export default {
+  setup() {
+    const divEl = useTemplateRef('my-div')
+    // <div ref="my-div">
+    return () => h('div', { ref: 'my-div' })
+  }
+}
+```
+
+## Functional Components
+
+Functional components without `this` context, using `render` or `setup()` functions.
+
+With `props` and `emits`:
+
+```js
+function MyComponent(props, { slots, emit, attrs }) {
+  // ...
+}
+
+MyComponent.props = ['value']
+MyComponent.emits = ['click']
+```
+
+Setting `inheritAttrs` to `false`:
+
+```js
+MyComponent.inheritAttrs = false
+```
+
+TypeScript with Functional Components:
+
+```ts
+import type { SetupContext } from 'vue'
+
+type FComponentProps = {
+  message: string
+}
+
+type Events = {
+  sendMessage(message: string): void
+}
+
+function FComponent(
+  props: FComponentProps,
+  context: SetupContext<Events>
+) {
+  return (
+    <button onClick={() => context.emit('sendMessage', props.message)}>
+      {props.message} {' '}
+    </button>
+  )
+}
+
+FComponent.props = {
+  message: {
+    type: String,
+    required: true
+  }
+}
+
+FComponent.emits = {
+  sendMessage: (value: unknown) => typeof value === 'string'
+}
+```
+
+Alternative TypeScript approach:
+
+```ts
+import type { FunctionalComponent } from 'vue'
+
+type FComponentProps = {
+  message: string
+}
+
+type Events = {
+  sendMessage(message: string): void
+}
+
+const FComponent: FunctionalComponent<FComponentProps, Events> = (
+  props,
+  context
+) => {
+  return (
+    <button onClick={() => context.emit('sendMessage', props.message)}>
+      {props.message} {' '}
+    </button>
+  )
+}
+
+FComponent.props = {
+  message: {
+    type: String,
+    required: true
+  }
+}
+
+FComponent.emits = {
+  sendMessage: (value) => typeof value === 'string'
+}
+```

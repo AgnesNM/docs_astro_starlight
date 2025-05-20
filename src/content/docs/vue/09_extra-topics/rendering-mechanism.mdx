@@ -1,0 +1,118 @@
+---
+title: RenderingMechanism
+description: Learn about RenderingMechanism in Vue.js
+---
+
+## Virtual DOM
+
+```js
+const vnode = {
+  type: 'div',
+  props: {
+    id: 'hello'
+  },
+  children: [
+    /* more vnodes */
+  ]
+}
+```
+
+## Render Pipeline
+
+Vue's rendering pipeline when mounting a component:
+
+1. **Compile**: Vue templates are compiled into render functions that return Virtual DOM trees.
+2. **Mount**: The render function is called to create VNodes, which are then used to create actual DOM nodes.
+3. **Patch**: When a component's state changes, the render function is called again to create a new VNode tree. Vue then performs a "patch" operation between the old and new VNode trees to update the DOM efficiently.
+
+## Template Compilation Optimization
+
+Vue performs optimizations during template compilation to improve runtime performance:
+
+### Hoisting Static Trees
+
+```html
+<div>
+  <div>foo</div> <!-- cached -->
+  <div>bar</div> <!-- cached -->
+  <div>{{ dynamic }}</div>
+</div>
+```
+
+Static sub-trees are hoisted and reused during re-renders.
+
+### Patch Flags
+
+Vue marks VNodes with patch flags to indicate which parts of the DOM need to be updated:
+
+```html
+<!-- class binding only -->
+<div :class="{ active }"></div>
+
+<!-- id and value bindings only -->
+<input :id="id" :value="value">
+
+<!-- text children only -->
+<div>{{ dynamic }}</div>
+```
+
+This results in compiled code like:
+
+```js
+createElementVNode("div", {
+  class: _normalizeClass({ active: _ctx.active })
+}, null, 2 /* CLASS */)
+```
+
+The patch flag `2` indicates only the class needs to be updated:
+
+```js
+if (vnode.patchFlag & PatchFlags.CLASS /* 2 */) {
+  // update the element's class
+}
+```
+
+### Block Tree
+
+Vue uses a block tree structure to track dynamic nodes:
+
+```js
+export function render() {
+  return (_openBlock(), _createElementBlock(_Fragment, null, [
+    /* children */
+  ], 64 /* STABLE_FRAGMENT */))
+}
+```
+
+Block tree example:
+
+```html
+<div> <!-- root block -->
+  <div>...</div> <!-- not tracked -->
+  <div :id="id"></div> <!-- tracked -->
+  <div> <!-- not tracked -->
+    <div>{{ bar }}</div> <!-- tracked -->
+  </div>
+</div>
+```
+
+This creates a block structure:
+```
+div (block root)
+- div with :id binding
+- div with {{ bar }} binding
+```
+
+Special handling for `v-if` and `v-for`:
+
+```html
+<div> <!-- root block -->
+  <div>
+    <div v-if> <!-- if block -->
+      ...
+    </div>
+  </div>
+</div>
+```
+
+The block tree allows Vue to efficiently skip static content and only update dynamic nodes during re-renders.

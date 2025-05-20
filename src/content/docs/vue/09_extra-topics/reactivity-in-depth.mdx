@@ -1,0 +1,309 @@
+---
+title: ReactivityInDepth
+description: Learn about ReactivityInDepth in Vue.js
+---
+
+## Basic Reactivity Example
+
+```js
+let A0 = 1
+let A1 = 2
+let A2 = A0 + A1
+console.log(A2) // 3
+A0 = 2
+console.log(A2) // Still 3
+```
+
+When we change `A0`, `A2` doesn't automatically update. To create reactivity:
+
+```js
+let A2
+function update() {
+  A2 = A0 + A1
+}
+whenDepsChange(update)
+```
+
+## How Vue Implements Reactivity
+
+Vue uses JavaScript's Proxy to detect when reactive properties are accessed or modified:
+
+```js
+function reactive(obj) {
+  return new Proxy(obj, {
+    get(target, key) {
+      track(target, key)
+      return target[key]
+    },
+    set(target, key, value) {
+      target[key] = value
+      trigger(target, key)
+    }
+  })
+}
+```
+
+For primitive values, Vue uses a `ref` object:
+
+```js
+function ref(value) {
+  const refObject = {
+    get value() {
+      track(refObject, 'value')
+      return value
+    },
+    set value(newValue) {
+      value = newValue
+      trigger(refObject, 'value')
+    }
+  }
+  return refObject
+}
+```
+
+## Tracking Dependencies
+
+```js
+// This will be set right before an effect is about to be run
+let activeEffect
+
+function track(target, key) {
+  if (activeEffect) {
+    const effects = getSubscribersForProperty(target, key)
+    effects.add(activeEffect)
+  }
+}
+
+function trigger(target, key) {
+  const effects = getSubscribersForProperty(target, key)
+  effects.forEach((effect) => effect())
+}
+```
+
+The dependency tracking system uses a `WeakMap<target, Map<key, Set<effect>>>` structure.
+
+## Effect Registration
+
+```js
+function whenDepsChange(update) {
+  const effect = () => {
+    activeEffect = effect
+    update()
+    activeEffect = null
+  }
+  effect()
+}
+```
+
+## Vue's API Example
+
+Using `ref` and `watchEffect`:
+
+```js
+import { ref, watchEffect } from 'vue'
+
+const A0 = ref(0)
+const A1 = ref(1)
+const A2 = ref()
+
+watchEffect(() => {
+  // tracks A0 and A1
+  A2.value = A0.value + A1.value
+})
+
+// triggers the effect
+A0.value = 2
+```
+
+Using the `computed` property:
+
+```js
+import { ref, computed } from 'vue'
+
+const A0 = ref(0)
+const A1 = ref(1)
+const A2 = computed(() => A0.value + A1.value)
+
+A0.value = 2
+```
+
+## DOM Updates Example
+
+Vue automatically batches DOM updates:
+
+```js
+import { ref, watchEffect } from 'vue'
+
+const count = ref(0)
+
+watchEffect(() => {
+  document.body.innerHTML = `Count is: ${count.value}`
+})
+
+// updates the DOM
+count.value++
+```
+
+## Debugging Reactivity
+
+Vue provides hooks for debugging reactivity:
+
+```js
+<script setup>
+import { onRenderTracked, onRenderTriggered } from 'vue'
+
+onRenderTracked((event) => {
+  debugger
+})
+
+onRenderTriggered((event) => {
+  debugger
+})
+</script>
+```
+
+The debugging event object:
+
+```ts
+type DebuggerEvent = {
+  effect: ReactiveEffect
+  target: object
+  type:
+    | TrackOpTypes /* 'get' | 'has' | 'iterate' */
+    | TriggerOpTypes /* 'set' | 'add' | 'delete' | 'clear' */
+  key: any
+  newValue?: any
+  oldValue?: any
+  oldTarget?: Map<any, any> | Set<any>
+}
+```
+
+Debugging computed properties:
+
+```js
+const plusOne = computed(() => count.value + 1, {
+  onTrack(e) {
+    // triggered when count.value is tracked as a dependency
+    debugger
+  },
+  onTrigger(e) {
+    // triggered when count.value is mutated
+    debugger
+  }
+})
+
+// access plusOne, should trigger onTrack
+console.log(plusOne.value)
+
+// mutate count.value, should trigger onTrigger
+count.value++
+```
+
+You can also debug watchers:
+
+```js
+watch(source, callback, {
+  onTrack(e) {
+    debugger
+  },
+  onTrigger(e) {
+    debugger
+  }
+})
+
+watchEffect(callback, {
+  onTrack(e) {
+    debugger
+  },
+  onTrigger(e) {
+    debugger
+  }
+})
+```
+
+## Integration with External State Management Libraries
+
+Using `shallowRef` with Immer:
+
+```js
+import { produce } from 'immer'
+import { shallowRef } from 'vue'
+
+export function useImmer(baseState) {
+  const state = shallowRef(baseState)
+  const update = (updater) => {
+    state.value = produce(state.value, updater)
+  }
+  return [state, update]
+}
+```
+
+Integration with XState:
+
+```js
+import { createMachine, interpret } from 'xstate'
+import { shallowRef } from 'vue'
+
+export function useMachine(options) {
+  const machine = createMachine(options)
+  const state = shallowRef(machine.initialState)
+  const service = interpret(machine)
+    .onTransition((newState) => (state.value = newState))
+    .start()
+  const send = (event) => service.send(event)
+  return [state, send]
+}
+```
+
+## Alternative API Patterns
+
+Vue's ref pattern requires using the `.value` property, while some libraries like SolidJS use a different approach:
+
+```js
+// SolidJS style
+const [count, setCount] = createSignal(0)
+count() // access the value
+setCount(1) // update the value
+```
+
+You can implement a similar API in Vue:
+
+```js
+import { shallowRef, triggerRef } from 'vue'
+
+export function createSignal(value, options) {
+  const r = shallowRef(value)
+  const get = () => r.value
+  const set = (v) => {
+    r.value = typeof v === 'function' ? v(r.value) : v
+    if (options?.equals === false) triggerRef(r)
+  }
+  return [get, set]
+}
+```
+
+Alternative signal implementation:
+
+```js
+import { shallowRef } from 'vue'
+
+export function signal(initialValue) {
+  const r = shallowRef(initialValue)
+  const s = () => r.value
+  s.set = (value) => {
+    r.value = value
+  }
+  s.update = (updater) => {
+    r.value = updater(r.value)
+  }
+  return s
+}
+
+// Usage:
+const count = signal(0)
+count() // access the value
+count.set(1) // set new value
+count.update((v) => v + 1) // update based on previous value
+```
+
+The function call approach `()` compared to using `.value` offers different API ergonomics depending on preferences.
