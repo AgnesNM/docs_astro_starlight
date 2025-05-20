@@ -1,131 +1,104 @@
 ---
-title: "Vue Documentation"
-# Other frontmatter properties as needed
+title: "Glossary"
+
 ---
 
-### Approachable
+This glossary provides definitions for common Vue.js terms to help newcomers understand Vue's terminology more quickly.
 
-Already know HTML, CSS and JavaScript? Read the guide and start building things in no time!
+## Core Vue Concepts
 
-### Versatile
+### Vue.js
+A progressive JavaScript framework for building user interfaces. It builds on standard HTML, CSS, and JavaScript with a declarative and component-based programming model.
 
-An incrementally adoptable ecosystem that scales between a library and a full-featured framework.
-
-### Performant
-
-Truly reactive, compiler-optimized rendering system that rarely requires manual optimization.
-
-### Progressive Integration
-
-Use Vue for a tiny part of your page or build complex single-page applications. Vue grows with your needs.
-
-## Features at a Glance
+### Reactivity
+Vue's system that automatically tracks JavaScript state changes and efficiently updates the DOM when changes happen. This is what enables the responsive, data-driven UI that Vue is known for.
 
 ### Declarative Rendering
+An approach where developers describe the desired state of the UI, and Vue handles updating the DOM to match that state. Instead of imperatively manipulating the DOM (like with vanilla JavaScript), you declare what should be shown based on your data.
 
-Vue extends standard HTML with a template syntax that allows us to declaratively describe HTML output based on JavaScript state.
+### Component
+The building blocks of Vue applications. Components are reusable, self-contained pieces of the user interface that contain their own HTML, CSS, and JavaScript.
 
-```html
-<div id="app">
-  <button @click="count++">
-    Count is: {{ count }}
-  </button>
-</div>
-```
+## Files and Structure
 
-### Reactive Data Binding
+### SFC (Single-File Component)
+A `.vue` file format that encapsulates the template (HTML), script (JavaScript), and styles (CSS) of a Vue component in a single file. This promotes modularity and reusability.
 
-Vue automatically tracks JavaScript state changes and efficiently updates the DOM when changes happen. No need for manual DOM manipulations.
+### Template
+The HTML portion of a Vue component that defines the component's structure. Templates can include Vue-specific syntax for data binding, directives, and event handling.
 
-### Component-Based Architecture
+## APIs and Implementation Methods
 
-Build encapsulated components that manage their own state, then compose them to make complex UIs. Component logic, template, and styles can live in a single file.
+### Options API
+A style of defining Vue components where component logic (data, methods, lifecycle hooks) is organized using predefined option properties in an object. It uses the familiar `this` context seen in class-based Object-Oriented Programming.
 
-```vue
-<script setup>
-import { ref } from 'vue'
-const count = ref(0)
-</script>
+### Composition API
+A set of APIs that allow developers to create Vue components using imported functions. Component logic is defined using reactive state variables and functions in the `setup()` function, enabling better code organization based on logical concerns rather than option types.
 
-<template>
-  <button @click="count++">Count is: {{ count }}</button>
-</template>
+### `setup()`
+A special function used with the Composition API that serves as the entry point for composing the component's reactive state and functions. Code inside the setup function executes before the component is created.
 
-<style scoped>
-button {
-  font-weight: bold;
-}
-</style>
-```
+## Reactive State
 
-### Rich Ecosystem
+### Ref
+A function that creates a reactive reference to a value. The value is stored in a `.value` property to maintain reactivity. For example, `const count = ref(0)` creates a reactive variable that can be updated with `count.value++`.
 
-Vue has a vast ecosystem of libraries and tools that help you tackle complexity in large applications:
+### Reactive
+A function that converts an object into a reactive proxy. Unlike refs, reactive objects don't require the `.value` property to access or mutate their properties.
 
-- **Vue Router** - The official router for Vue.js
-- **Pinia** - State management that is intuitive and type-safe
-- **Vite** - Next generation frontend tooling
-- **Nuxt** - An intuitive framework built on top of Vue
+## Template Syntax
 
-## Get Started
+### Interpolation (`{{ }}`)
+The double curly braces syntax used in templates to display reactive data. For example, `{{ count }}` will display the value of the count variable.
 
-New to Vue.js? Here are some resources to get you started:
+### Directives
+Special attributes with the `v-` prefix that apply reactive behavior to DOM elements. Common examples include:
+- `v-bind` or `:` shorthand: Binds an attribute to a reactive value
+- `v-on` or `@` shorthand: Attaches event listeners
+- `v-if`, `v-else`, `v-show`: Conditional rendering
+- `v-for`: List rendering
+- `v-model`: Two-way data binding
 
-### For Beginners
+### `@click`
+A shorthand for the `v-on:click` directive that attaches a click event listener to an element. For example, `<button @click="increment">` calls the `increment` function when the button is clicked.
 
-- [Introduction to Vue.js](/guide/introduction)
-- [Quick Start Guide](/guide/quick-start)
-- [Interactive Tutorial](/tutorial/)
+## Component Lifecycle and Mounting
 
-### For Experienced Developers
+### Mount
+The process of attaching a Vue application or component to a DOM element. The `mount('#app')` method connects the Vue application to the DOM element with the ID of 'app'.
 
-- [Migration from Vue 2](/guide/migration)
-- [TypeScript Support](/guide/typescript)
-- [Best Practices](/style-guide/)
+### Lifecycle Hooks
+Special functions that allow you to run code at specific times during a component's lifecycle, such as when it's created, mounted to the DOM, updated, or destroyed. Examples include `onMounted()`, `onUpdated()`, and `beforeUnmount()`.
 
-### Exploring the Ecosystem
+## Styling
 
-- [Official Tools](/ecosystem/official-tools)
-- [Community Projects](/ecosystem/community)
-- [UI Libraries](/ecosystem/ui-libraries)
+### Scoped CSS
+A feature in Single-File Components where styles defined with the `<style scoped>` tag only apply to elements within that component. This prevents CSS from leaking to other components, enabling more maintainable styling.
 
-## Join Our Community
+## Advanced Concepts
 
-Vue has a vibrant and friendly community. If you have questions or want to contribute:
+### Virtual DOM
+An in-memory representation of the real DOM that Vue uses to optimize updates. Vue compares the new virtual DOM with the previous one to determine the minimal number of real DOM operations needed.
 
-- [Discord Chat](https://chat.vuejs.org/)
-- [Forum](https://forum.vuejs.org/)
-- [Twitter](https://twitter.com/vuejs)
-- [GitHub](https://github.com/vuejs)
+### Teleport
+A built-in component that allows you to "teleport" a part of a component's template to exist in the DOM outside of the Vue app—useful for modals, tooltips, etc.
 
----
+### Provide/Inject
+A dependency injection system in Vue that allows a parent component to "provide" data that can be "injected" into any of its descendants, regardless of how deep the component hierarchy is.
 
-<div class="footer-links">
-  <div class="footer-section">
-    <h3>Documentation</h3>
-    <ul>
-      <li><a href="/guide/introduction">Guide</a></li>
-      <li><a href="/api/">API Reference</a></li>
-      <li><a href="/style-guide/">Style Guide</a></li>
-      <li><a href="/examples/">Examples</a></li>
-    </ul>
-  </div>
-  <div class="footer-section">
-    <h3>Resources</h3>
-    <ul>
-      <li><a href="/ecosystem/partners">Partners</a></li>
-      <li><a href="/ecosystem/themes">Themes</a></li>
-      <li><a href="/certification/">Certification</a></li>
-      <li><a href="https://vuejobs.com/">Jobs</a></li>
-    </ul>
-  </div>
-  <div class="footer-section">
-    <h3>Support Vue</h3>
-    <ul>
-      <li><a href="/sponsor/">One-time Donation</a></li>
-      <li><a href="https://github.com/sponsors/vuejs">GitHub Sponsors</a></li>
-      <li><a href="/enterprise/">Enterprise Support</a></li>
-    </ul>
-  </div>
-</div>
+### Suspense
+An experimental feature that allows you to handle async dependencies in your component tree, showing fallback content while async components are loading.
 
+## Building and Tooling
+
+### Vite
+A modern frontend build tool that provides a faster and leaner development experience for Vue projects.
+
+### Vue CLI
+The standard tooling for Vue.js development, providing a full system for rapid Vue development including project scaffolding, a plugin system, and GUI.
+
+### Vuex
+A state management pattern and library for Vue applications, helping to manage shared state across components in a predictable way (Note: Pinia is the new recommended state management solution for Vue 3).
+
+### Vue Router
+The official router for Vue.js, providing a way to map components to different browser URL paths.
