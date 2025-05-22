@@ -56,3 +56,5 @@ Check out [Starlight’s docs](https://starlight.astro.build/), read [the Astro 
 ## Access the project
 
 The project is deployed at: https://docs-astro-starlight.vercel.app/
+
+The documentation audit: https://abbys-portfolio.gitbook.io/product-documentation/vuejs-docs-audit
