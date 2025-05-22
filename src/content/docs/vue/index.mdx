@@ -102,3 +102,26 @@ A state management pattern and library for Vue applications, helping to manage s
 
 ### Vue Router
 The official router for Vue.js, providing a way to map components to different browser URL paths.
+
+## Class and Style Bindings
+
+### `v-bind` (and `:` shorthand)
+A directive that binds an attribute to a reactive value. When used with `class` or `style` attributes, it provides special enhancements for manipulating an element's classes and inline styles reactively. The colon syntax (`:class`) is the shorthand for `v-bind:class`.
+
+### Binding
+The process of connecting a DOM element's attribute, property, or content to a reactive data source in Vue. When the data changes, the bound DOM element updates automatically.
+
+### Object Syntax for Class Binding
+A technique for conditionally applying CSS classes by passing an object to the `v-bind:class` directive. The object keys are class names, and the values are boolean expressions that determine if the class should be applied.
+
+### Array Syntax for Class Binding
+A method for applying multiple classes by binding an array to the `v-bind:class` directive. Each array element can be a string (class name) or an object (for conditional classes).
+
+### Truthiness
+In JavaScript and Vue.js, a concept where values are evaluated for their boolean context. Any value that is not `false`, `0`, `""`, `null`, `undefined`, or `NaN` is considered "truthy" and will evaluate to `true` in boolean contexts, such as class binding conditions.
+
+### Style Binding
+Similar to class binding, but for inline styles. Vue provides special handling for the `style` attribute, allowing you to bind to objects or arrays of style properties that will be merged with any existing inline styles.
+
+### Auto-prefixing
+A feature in Vue's style binding system that automatically adds appropriate vendor prefixes (like `-webkit-` or `-ms-`) to CSS properties when needed for browser compatibility.
