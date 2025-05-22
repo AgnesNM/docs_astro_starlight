@@ -13,6 +13,58 @@ import { Aside } from '@astrojs/starlight/components';
   [Watch a free video lesson on Vue School](https://vueschool.io/lessons/vue-fundamentals-capi-dynamic-css-classes-with-vue?friend=vuejs)
 </Aside>
 
+### Direct Variable Binding
+
+The most basic form of class binding connects an element's class directly to a variable. When the variable's value changes, the class updates automatically. This is useful when you want to switch between different predefined classes.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const primaryClass = ref('text-primary')
+</script>
+
+<template>
+  <div :class="primaryClass">This text has a dynamic class</div>
+</template>
+```
+
+### Simple String Concatenation
+
+You can use JavaScript template literals within class bindings to dynamically create class names from multiple variables. This approach works well for predictable class naming patterns like utility-based CSS frameworks.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const size = ref('large')
+const type = ref('warning')
+</script>
+
+<template>
+  <div :class="`btn-${size} text-${type}`">
+    Dynamic Button
+  </div>
+</template>
+```
+
+### Ternary to Object Syntax
+
+While you can use ternary expressions for conditional classes, the object syntax provides a more readable alternative. The object syntax is especially valuable when dealing with multiple conditional classes, as it keeps your template cleaner and easier to maintain.
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const isActive = ref(true)
+</script>
+
+<template>
+  <!-- Before: Using ternary expression -->
+  <div :class="isActive ? 'active' : ''">Using ternary</div>
+  
+  <!-- After: Using object syntax (cleaner) -->
+  <div :class="{ active: isActive }">Using object syntax</div>
+</template>
+```
+
 ### Binding to Objects
 
 We can pass an object to `:class` (short for `v-bind:class`) to dynamically toggle classes:
