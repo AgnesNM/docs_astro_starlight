@@ -5,26 +5,35 @@ description: Learn about QuickStart in Vue.js
 
 ## Try Vue Online
 
-To quickly get a taste of Vue, you can try it directly in our [Playground](https://vuejs.org/playground).
+To quickly get a taste of Vue, you can try it directly in our [Playground](https://play.vuejs.org/#eNp9kVFLwzAQx7/KeS9TmBuiT6MOVAbqg4oKvuSltLeuM01CcpmF0u/utaXVhzEISe7/vyS/yzV459ziEAlXmITMl47XylDtrGfIaZtGzdAoA5CnnJ5fDHsATxy9GSOAKhQrmD2S1ha+rNf52Wyw2m6RSUaynB6QgKlyOmWSCCDZXa2bprsF2jZZStSrpXGR4XBZ2Zz0rULxFYqVLKfTOEcOmTXbsljsgzVSRw+lMLOVKzX5V8elNUHhasRVmArnz3OvsY80H/VsR9n3EX0f6k5T+OYpkD+Qwsnj1BfEg735eKFa9pMp5FFL9gnznYLVsWMc0u6jyQX7X15P+1R1PSlN8Rk2NZMJY1EdaP/Jfb5CaebDidL/cK8XN2NzsP0F+HSp8w==).
 
 If you prefer a plain HTML setup without any build steps, you can use this [JSFiddle](https://jsfiddle.net) as your starting point.
 
 If you are already familiar with Node.js and the concept of build tools, you can also try a complete build setup right within your browser on [StackBlitz](https://stackblitz.com).
 
+To get a walkthrough of the recommended setup, watch this interactive [Scrimba](https://scrimba.com/learn-vuejs-c09q9jrprp/~02rd?via=vue) tutorial that shows you how to run, edit, and deploy your first Vue app.
+
 ## Creating a Vue Application
 
-### Prerequisites
+import { Aside } from '@astrojs/starlight/components';
 
-- Familiarity with the command line
-- Install Node.js version 18.3 or higher
+<Aside type="note" title="Prerequisites">- Familiarity with the command line - Install [Node.js](https://nodejs.org/en) version 18.3 or higher </Aside>
 
 In this section we will introduce how to scaffold a Vue [Single Page Application](https://vuejs.org/guide/extras/ways-of-using-vue.html#single-page-application-spa) on your local machine. The created project will be using a build setup based on [Vite](https://vitejs.dev/) and allow us to use Vue [Single-File Components](https://vuejs.org/guide/scaling-up/sfc.html) (SFCs).
 
-Make sure you have an up-to-date version of Node.js installed and your current working directory is the one where you intend to create a project. Run the following command:
+Make sure you have an up-to-date version of [Node.js] (https://nodejs.org/en) installed and your current working directory is the one where you intend
+to create a project. Run the following command in your command line (without the $ sign):
 
-```bash
-$ npm create vue@latest
-```
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Tabs>
+  <TabItem label="npm">```sh npm create vue@latest```</TabItem>
+  <TabItem label="pnpm"> ```sh pnpm create vue@latest```</TabItem>
+  <TabItem label="yarn"> ```sh yarn create vue@latest```</TabItem>
+  <TabItem label="bun">```sh bun create vue@latest```</TabItem>
+</Tabs>
+
 
 This command will install and execute [create-vue](https://github.com/vuejs/create-vue), the official Vue project scaffolding tool. You will be presented with prompts for several optional features such as TypeScript and testing support:
 
@@ -44,25 +53,78 @@ Scaffolding project in ./<your-project-name>...
 Done.
 ```
 
-If you are unsure about an option, simply choose `No` by hitting enter for now. Once the project is created, follow the instructions to install dependencies and start the dev server:
+If you are unsure about an option, simply choose `No` by hitting enter for now. Once the project is created, follow the instructions to install 
+dependencies and start the dev server:
 
-```bash
-$ cd <your-project-name>
-$ npm install
-$ npm run dev
+```mdx
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Tabs>
+  <TabItem label="npm">
+    ```sh
+    cd <your-project-name>
+    npm install
+    npm run dev    
+    ```  </TabItem>
+  <TabItem label="pnpm">
+    ```sh
+    cd <your-project-name>
+    pnpm install
+    pnpm run dev  
+    ```</TabItem>
+  <TabItem label="yarn">
+    ```sh
+    cd <your-project-name>
+    yarn
+    yarn dev  
+    ```</TabItem>    
+  <TabItem label="bun">
+    ```sh
+    cd <your-project-name>
+    bun install
+    bun run dev  
+    ```</TabItem>
+</Tabs>
 ```
 
 You should now have your first Vue project running! Note that the example components in the generated project are written using the [Composition API](https://vuejs.org/api/composition-api-setup.html) and `<script setup>`, rather than the [Options API](https://vuejs.org/api/options-overview.html). Here are some additional tips:
 
 - The recommended IDE setup is [Visual Studio Code](https://code.visualstudio.com/) + [Vue - Official extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar). If you use other editors, check out the [IDE support section](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+- More tooling details, including integration with backend frameworks, are discussed in the [Tooling Guide](/vue/06_scaling-up/tooling)
 - To learn more about the underlying build tool Vite, check out the [Vite docs](https://vitejs.dev).
 - If you choose to use TypeScript, check out the [TypeScript Usage Guide](https://vuejs.org/guide/typescript/overview.html).
 
 When you are ready to ship your app to production, run the following:
-
-```bash
-$ npm run build
-```
+<Tabs>
+  <TabItem label="npm">
+    ```sh
+    cd <your-project-name>
+    npm install
+    npm run dev    
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```sh
+    cd <your-project-name>
+    pnpm install
+    pnpm run dev  
+    ```
+  </TabItem>
+  <TabItem label="yarn">
+    ```sh
+    cd <your-project-name>
+    yarn
+    yarn dev  
+    ```
+  </TabItem>
+  <TabItem label="bun">
+    ```sh
+    cd <your-project-name>
+    bun install
+    bun run dev  
+    ```
+  </TabItem>
+</Tabs>
 
 This will create a production-ready build of your app in the project's `./dist` directory. Check out the [Production Deployment Guide](https://vuejs.org/guide/best-practices/production-deployment.html) to learn more about shipping your app to production.
 
@@ -101,7 +163,10 @@ The example above uses the global build of Vue, where all top-level APIs are exp
 </script>
 ```
 
-[Try it on CodePen](https://vuejs.org/examples/#hello-world)
+[CodePen Demo](https://vuejs.org/examples/#hello-world)
+
+<Aside type="tip" title="TIP">Many of the examples for Composition API throughout the guide will be using the `<script setup>` syntax, which requires build tools. If you intend to use Composition API without a build step, consult the usage of the `setup()` [option](https://vuejs.org/api/composition-api-setup.html).</Aside>
+
 
 ### Using the ES Module Build
 
@@ -125,6 +190,8 @@ Throughout the rest of the documentation, we will be primarily using the [ES mod
 ```
 
 Notice that we are using `<script type="module">`, and the imported CDN URL is pointing to the ES modules build of Vue instead.
+
+[CodePen Demo](https://codepen.io/vuejs-examples/pen/MWzazEv)
 
 ### Enabling Import Maps
 
@@ -161,11 +228,14 @@ We can teach the browser where to locate the `vue` import by using [Import Maps]
 </script>
 ```
 
+[CodePen Demo](https://codepen.io/vuejs-examples/pen/YzRyRYM)
+
 You can also add entries for other dependencies to the import map - but make sure they point to the ES modules version of the library you intend to use.
 
-### Import Maps Browser Support
+<Aside type="tip" title = "Import Maps Browser Support"> Import Maps is a relatively new browser feature. Make sure to use a browser within its [support range](https://caniuse.com/?search=importmap). In particular, it is only supported in Safari 16.4+.</Aside>
 
-Import Maps is a relatively new browser feature. Make sure to use a browser within its [support range](https://caniuse.com/?search=importmap). In particular, it is only supported in Safari 16.4+.
+<Aside type="note" title="Notes on Production Use">The examples so far are using the development build of Vue - if you intend to use Vue from a CDN in production, make sure to check out the [Production Deployment Guide](/vue/07_best-practices/tooling). 
+While it is possible to use Vue without a build system, an alternative approach to consider is using `vuejs/petite-vue` that could better suit the context where `jquery/jquery` (in the past) or `alpinejs/alpine` (in the present) might be used instead.</Aside>
 
 ### Splitting Up the Modules
 
@@ -200,7 +270,7 @@ If you directly open the above `index.html` in your browser, you will find that 
 
 Due to security reasons, ES modules can only work over the `http://` protocol, which is what the browsers use when opening pages on the web. In order for ES modules to work on our local machine, we need to serve the `index.html` over the `http://` protocol, with a local HTTP server.
 
-To start a local HTTP server, first make sure you have Node.js installed, then run `npx serve` from the command line in the same directory where your HTML file is. You can also use any other HTTP server that can serve static files with the correct MIME types.
+To start a local HTTP server, first make sure you have [Node.js](https://nodejs.org/en/) installed, then run `npx serve` from the command line in the same directory where your HTML file is. You can also use any other HTTP server that can serve static files with the correct MIME types.
 
 You may have noticed that the imported component's template is inlined as a JavaScript string. If you are using VS Code, you can install the [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) extension and prefix the strings with a `/*html*/` comment to get syntax highlighting for them.
 
@@ -208,12 +278,18 @@ You may have noticed that the imported component's template is inlined as a Java
 
 If you skipped the [Introduction](https://vuejs.org/guide/introduction.html), we strongly recommend reading it before moving on to the rest of the documentation.
 
-The guide walks you through every aspect of the framework in full detail.
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
-### Try the Tutorial
+<CardGrid>
+  <Card title="Continue with the Guide" href="/vue/02_essentials/creating-an-application.mdx">
+    The guide walks you through every aspect of the framework in full detail.
+  </Card>
+  <Card title="Try the Tutorial" href="https://vuejs.org/tutorial/#step-1">
+    For those who prefer learning things hands-on.
+  </Card>
+  <Card title="Check out the Examples" href="https://vuejs.org/examples/#hello-world">
+    Explore examples of core features and common UI tasks.
+  </Card>
+</CardGrid>
 
-For those who prefer learning things hands-on.
-
-### Check out the Examples
-
-Explore examples of core features and common UI tasks.
+<Aside type="tip">[Edit this page on GitHub](https://github.com/vuejs/docs/edit/main/src/guide/quick-start.md)</Aside>
